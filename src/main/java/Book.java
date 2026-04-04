@@ -93,5 +93,12 @@ public class Book {
         sb.append("ISBN: " + isbn);
         return sb.toString();
     }
-    
+
+    public String getISBN() {
+        return isbn;
+    }
+
+    public void setISBN(String isbn) {
+
+    }
 }
