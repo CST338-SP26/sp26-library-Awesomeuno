@@ -14,6 +14,9 @@ public class Shelf {
         this.shelfNumber = shelfNumber;
         this.subject = subject;
     }
+    public  Shelf(){
+
+    }
 
     public HashMap<Book, Integer> getBooks() {
         return books;
@@ -89,6 +92,15 @@ public class Shelf {
             System.out.println(book + " successfully removed from shelf  " + this.subject);
             return Code.SUCCESS;
         }
+    }
+
+    public String listBooks() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getBookCount() + " books on shelf: " + this.toString()).append("\n");
+        for (Book book : books.keySet()) {
+                sb.append(book.toString()).append(" ").append(books.get(book)).append("\n");
+        }
+        return sb.toString();
     }
 
 
