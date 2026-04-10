@@ -13,6 +13,7 @@ public class Shelf {
     public Shelf(int shelfNumber, String subject) {
         this.shelfNumber = shelfNumber;
         this.subject = subject;
+        this.books = new HashMap<>();
     }
     public  Shelf(){
 
@@ -55,29 +56,29 @@ public class Shelf {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.shelfNumber + ": " + this.subject);
+        sb.append(this.shelfNumber + " : " + this.subject);
         return sb.toString();
     }
 
-    public int getBookCount() {
-        if (books == null) {
+    public int getBookCount(Book book) {
+        if (books == null || !books.containsKey(book)) {
             return -1;
-        } else {
-            return books.size();
         }
+        return books.get(book);
     }
 
     public Code addBook(Book book) {
-        if(!books.containsKey(book) && !books.containsValue(this.shelfNumber)) {
-            return Code.SHELF_SUBJECT_MISMATCH_ERROR;
+        if((books == null || !books.containsKey(book)) && book.getSubject().equals(this.subject)) {
+            books.put(book, 1);
+            System.out.println(toString() + " added to shelf");
+            return Code.SUCCESS;
         } else if (books.containsKey(book)) {
             books.put(book, books.get(book) + 1);
             System.out.println(toString() + " added to shelf");
             return Code.SUCCESS;
         } else{
-            books.put(book, 1);
-            System.out.println(toString() + " added to shelf");
-            return Code.SUCCESS;
+
+            return Code.SHELF_SUBJECT_MISMATCH_ERROR;
         }
     }
 
@@ -96,7 +97,12 @@ public class Shelf {
 
     public String listBooks() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getBookCount() + " books on shelf: " + this.toString()).append("\n");
+        if(books == null || books.isEmpty()) {
+            sb.append(0 + " books on shelf: " + this.toString()).append("\n");
+            return sb.toString();
+        }
+        int total = books.values().stream().mapToInt(Integer::intValue).sum();
+        sb.append(total + " books on shelf: " + this.toString()).append("\n");
         for (Book book : books.keySet()) {
                 sb.append(book.toString()).append(" ").append(books.get(book)).append("\n");
         }
